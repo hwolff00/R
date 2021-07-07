@@ -1,8 +1,7 @@
 install.packages("tidyverse")
-install.packages("ggrepel")
+install.packages("dplyr")
 install.packages("janitor")
 library(tidyverse)
-library(ggrepel)
 library(dplyr)
 library(janitor)
 
@@ -12,9 +11,12 @@ ramen <- read_csv("Desktop/ramen-ratings.csv")
 # View tibble of data
 ramen
 
-rara <- ramen %>% group_by(Country, Style, Stars, Brand) %>%
-  drop_na()
+rara <- ramen %>% 
+  group_by(Country, Style, Stars, Brand) %>%
+  # use janitor to turn black columns into NA to make cleaning easier later
+  na_if("")
 
+# Saves Dataframe as a new file
 View(rara)
 
 select(rara,`Top Ten`)
@@ -22,9 +24,6 @@ select(rara,`Top Ten`)
 ra <- rara %>% separate(`Top Ten`, c("Year", "Rank"), sep= " ")
 
 ra <- ra %>%
-  # recode empty strings "" by NAs
-  na_if("") %>%
-  # remove NAs
   drop_na()
 
 View(ra)
